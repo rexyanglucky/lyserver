@@ -116,7 +116,7 @@ const DB_CONN_STR = 'mongodb://localhost:27017/lyapp'; /*
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query).sort({ updateTime: 1 }).limit.toArray((err, result) => {
+                collection.find(query).sort({ updateTime: 1 }).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);
@@ -142,7 +142,7 @@ const DB_CONN_STR = 'mongodb://localhost:27017/lyapp'; /*
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query).sort({ updateTime: 1 }).limit.toArray((err, result) => {
+                collection.find(query).sort({ updateTime: 1 }).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);

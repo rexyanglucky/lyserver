@@ -51,6 +51,7 @@ http.createServer(function (req, res) {
             else {
                 //todo 可为每个请求创建单独的上下文存储路由相关信息，目前暂且使用全局router
                 //可测试多个请求下router值变化问题
+                res.setHeader("Access-Control-Allow-Origin","*");
                 var router = new Router();
                 if (req.method === "GET") {
                     let purl = url.parse(req.url);
