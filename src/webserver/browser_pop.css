@@ -1,0 +1,154 @@
+
+*{margin:0;padding:0;}
+.browser_pop{
+
+}
+
+
+.browser_pop .pop_layer{
+    background:rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+    filter:Alpha(opacity=30);
+    *background:#000;/*实现IE背景透明*/
+    background:#000\0/;
+    position: fixed;
+    z-index: 10001;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    *zoom:1;
+    width: 100%;
+    height: 100%;
+    _position:absolute;   
+
+}
+/*除IE6浏览器的通用方法*/
+/* .browser_pop .ie6fixedTL{position:fixed;left:0;top:0} */
+/* .browser_pop .ie6fixedBR{position:fixed;right:0;bottom:0} */
+/* IE6浏览器的特有方法 */
+/* * html .browser_pop .ie6fixedTL{position:absolute;left:expression(eval(document.documentElement.scrollLeft));top:expression(eval(document.documentElement.scrollTop))} */
+/* * html .browser_pop .ie6fixedBR{position:absolute;left:expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth)-(parseInt(this.currentStyle.marginLeft,10)||0)-(parseInt(this.currentStyle.marginRight,10)||0));top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)))} */
+
+.pop_bg_img{
+    background: url('./img/browser_pop_1.png') no-repeat;
+}
+.browser_pop .pop{
+    width: 362px;
+    height: 454px;
+    position: absolute;
+    z-index: 10002;
+    left: 50%;
+    top: 40%;
+    margin: -181px 0 0 -181px;
+}
+.browser_pop .close_bg{
+    position: absolute;
+    left: 297px;
+    top: 114px;
+    width: 40px;
+    height: 40px;
+    background-position: -371px 0;
+    cursor: pointer;
+}
+.browser_pop .close{
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-position: -371px -66px;
+    margin: 13px 0 0 13px;
+
+}
+.browser_pop .pop_main .browser_low{
+    font-family: "微软雅黑";
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    margin-top: 160px;
+}
+/**建议浏览器 start**/
+.browser_pop .pop_main .browser_suggest{
+padding: 0 54px;
+margin-top: 18px;
+overflow: hidden;
+}
+.browser_pop .pop_main .browser_suggest .browser_item{
+    float: left;
+    margin-left: 34px;
+}
+.browser_pop .pop_main .browser_suggest .browser_item a{
+    text-decoration: none;
+}
+.browser_pop .pop_main .browser_suggest .browser_item .browser_icon{
+    width: 58px;
+    height: 58px;
+}
+.browser_pop .pop_main .browser_suggest .browser_item_IE{
+    margin-left: 0;
+}
+.browser_pop .pop_main .browser_suggest .browser_item_IE .browser_icon{
+    background-position: -420px 0;
+}
+.browser_pop .pop_main .browser_suggest .browser_item_chrome .browser_icon{
+    background-position: -486px 0;
+    
+}
+.browser_pop .pop_main .browser_suggest .browser_item_firfox .browser_icon{
+    background-position: -552px 0;
+}
+
+.browser_pop .pop_main .browser_suggest .browser_item .browser_info{
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.3;
+    margin-top: 10px;
+    text-align: center;
+    white-space: nowrap;
+}
+/**建议浏览器 end**/
+
+/**极速浏览器 start**/
+.browser_pop .pop_main .browser_jisu{
+    padding: 0 34px;
+    margin-top: 34px;
+    overflow: hidden;
+    line-height: 30px;
+}
+.browser_pop .pop_main .browser_jisu  .browser_jisu_info{
+    float: left;
+    font-size: 12px;
+    color: #999999;
+}
+.browser_pop .pop_main .browser_jisu .browser_jisu_item{
+    text-decoration: none;
+    float: left;
+    margin-left: 4px;
+    cursor: default;
+}
+.browser_pop .pop_main .browser_jisu .browser_jisu_item.sg{
+    margin-left: 0px;
+}
+.browser_pop .pop_main .browser_jisu .browser_jisu_item .browser_icon_js{
+    width: 30px;height: 30px;
+    display: block;
+}
+.browser_pop .pop_main .browser_jisu .browser_jisu_item .browser_sg{
+    background-position: -420px -64px;
+}
+.browser_pop .pop_main .browser_jisu .browser_jisu_item .browser_360{
+    background-position: -454px -65px;
+}
+.browser_pop .pop_main .browser_jisu .browser_jisu_item .browser_qq{
+    background-position: -488px -65px;
+}
+/**极速浏览器 end**/
+.browser_pop .pop_main .btn_close{
+    text-align: center;
+    color: #666666;
+    font-size: 14px;
+    margin-top: 20px;
+   
+}
+.browser_pop .pop_main .btn_close span{
+    cursor: pointer;
+}

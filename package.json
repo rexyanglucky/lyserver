@@ -1,0 +1,24 @@
+{
+  "name": "lymvc",
+  "version": "1.0.0",
+  "description": "this is a simple mvc example for small projects",
+  "main": "server.js",
+  "scripts": {
+    "dev": "babel-node src/webserver/server.js",
+    "build": "babel src -d dist --source-maps",
+    "server": "node dist/server.js"
+  },
+  "keywords": [
+    "mvc",
+    "node",
+    "webserver"
+  ],
+  "author": "rexyang",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "mongodb": "^2.2.33"
+  }
+}
