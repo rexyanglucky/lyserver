@@ -13,24 +13,28 @@ class MongodbHelper {
      */
     Connect(callback) {
         console.log("start connect");
-        MongoClient.connect(DB_CONN_STR, (err, db) => {
-            console.log("connected");
-            //调用业务处理逻辑，并将处理结果回调，关闭连接
-            callback(db, (err, result, cb) => {
-                db.close();
-                if (err) {
-                    console.log("Error:" + err);
-                }
-                else {
-                    console.log(result);
-                }
-                if (cb) {
-                    cb(result);
-                }
+        try {
+            MongoClient.connect(DB_CONN_STR, (err, db) => {
+                console.log("connected");
+                //调用业务处理逻辑，并将处理结果回调，关闭连接
+                callback(db, (err, result, cb) => {
+                    db.close();
+                    if (err) {
+                        console.log("Error:" + err);
+                    }
+                    else {
+                        console.log(result);
+                    }
+                    if (cb) {
+                        cb(result);
+                    }
 
 
-            });
-        })
+                });
+            })
+        } catch (err) {
+            console.log(err);
+        }
     }
     /**
      * 插入数据
@@ -116,7 +120,7 @@ class MongodbHelper {
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query).sort({updateTime:1}).toArray((err, result) => {
+                collection.find(query).sort({ updateTime: 1 }).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);
@@ -134,15 +138,15 @@ class MongodbHelper {
         this.Connect(c);
 
     }
-      /**
-     * 查询数据
-     * @param {*} param0 
-     */
+    /**
+   * 查询数据
+   * @param {*} param0 
+   */
     QueryDBList({ collectionName, query, callback }) {
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query).sort({updateTime:1}).toArray((err, result) => {
+                collection.find(query).sort({ updateTime: 1 }).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);
