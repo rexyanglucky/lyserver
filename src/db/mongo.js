@@ -2,39 +2,48 @@
  author:mongo helper
 */
 import { MongoClient } from 'mongodb';
-const DB_CONN_STR = 'mongodb://localhost:27017/lyapp';
+// const DB_CONN_STR = 'mongodb://localhost:27017/lyapp';
+const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp';
+
 class MongodbHelper {
     constructor() {
         // console.log(MongoClient);
     }
     /**
      * 连接数据库
-     * @param {callback} callback 
+     * @param {successCallBack} successCallBack 连接成功回调
+     * @param {errCallBack} errCallBack         连接失败回调
      */
-    Connect(callback) {
+    Connect(successCallBack,errCallBack) {
         console.log("start connect");
-        try {
-            MongoClient.connect(DB_CONN_STR, (err, db) => {
+        MongoClient.connect(DB_CONN_STR, (err, db) => {
+            if (err) {
+                console.log("connect failed");
+                errCallBack&&errCallBack(err);
+            }
+            else {
                 console.log("connected");
                 //调用业务处理逻辑，并将处理结果回调，关闭连接
-                callback(db, (err, result, cb) => {
-                    db.close();
-                    if (err) {
-                        console.log("Error:" + err);
-                    }
-                    else {
-                        console.log(result);
-                    }
-                    if (cb) {
-                        cb(result);
-                    }
+                try {
+                    successCallBack(db, (err, result, cb) => {
+                        db.close();
+                        if (err) {
+                            console.log("Error:" + err);
+                        }
+                        else {
+                            console.log(result);
+                        }
+                        if (cb) {
+                            cb(result);
+                        }
+                    });
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+        })
 
-
-                });
-            })
-        } catch (err) {
-            console.log(err);
-        }
     }
     /**
      * 插入数据
@@ -59,7 +68,8 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c);
+        //前台传递过来的回调函数，用于将连接异常返回给前台
+        this.Connect(c,callback);
     }
     /**
      * 删除数据
@@ -84,7 +94,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c);
+        this.Connect(c,callback);
 
     }
     /**
@@ -110,7 +120,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c);
+        this.Connect(c,callback);
     }
     /**
      * 查询数据
@@ -135,7 +145,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c);
+        this.Connect(c,callback);
 
     }
     /**
@@ -161,7 +171,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c);
+        this.Connect(c,callback);
 
     }
 }
