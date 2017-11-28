@@ -31,7 +31,7 @@ http.createServer(function (req, res) {
     if (req.url != "/favicon.ico") {
         var path = url.parse(req.url).path;
         if (path == "/") {
-            path = "home/index";
+            path = "/index.html";
         }
         var fpath = p.join(__dirname, path);
         fs.exists(fpath, function (r) {
