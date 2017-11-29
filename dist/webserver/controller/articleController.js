@@ -43,6 +43,13 @@ let controller = {
             res.end(JSON.stringify({ code: 1, data: result }));
         }, param);
 
+    },
+    delete(req, res, router) {
+        let id = router.param.id;
+        this.bll.delArticle(result => {
+            res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+            res.end(JSON.stringify({ code: 1, data: result }));
+        }, id);
     } };
 
 

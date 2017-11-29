@@ -63,5 +63,11 @@ class ArticleBll {
             }
         });
     }
+
+    delArticle(callback,...id){
+        this.dbHelper.DeleteDB({collectionName:"article",query:{_id:ObjectId(id[0])},callback:(result)=>{
+            callback(result);
+        }})
+    }
 }
 export default ArticleBll;

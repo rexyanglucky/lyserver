@@ -62,6 +62,12 @@ class ArticleBll {
                 callback(result);
             } });
 
+    }
+
+    delArticle(callback, ...id) {
+        this.dbHelper.DeleteDB({ collectionName: "article", query: { _id: (0, _mongodb.ObjectId)(id[0]) }, callback: result => {
+                callback(result);
+            } });
     }}exports.default =
 
 ArticleBll;

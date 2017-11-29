@@ -52,6 +52,7 @@ http.createServer(function (req, res) {
                 //todo 可为每个请求创建单独的上下文存储路由相关信息，目前暂且使用全局router
                 //可测试多个请求下router值变化问题
                 res.setHeader("Access-Control-Allow-Origin","*");
+                // res.setHeader("Content-Type", "application/json;charset=utf-8");
                 var router = new Router();
                 if (req.method === "GET") {
                     let purl = url.parse(req.url);
@@ -72,6 +73,13 @@ http.createServer(function (req, res) {
                         router.resolveUrl(req.url);
                         router.redirectAction(req, res);
                     })
+                }
+                else if(req.method==="OPTIONS"){
+                    res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+                    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept, origin, content-type");
+                    res.setHeader("X-Powered-By", ' 3.2.1');
+                    res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+                    res.end("OPTIONS");
                 }
 
             }
