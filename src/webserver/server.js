@@ -51,7 +51,7 @@ http.createServer(function (req, res) {
             else {
                 //todo 可为每个请求创建单独的上下文存储路由相关信息，目前暂且使用全局router
                 //可测试多个请求下router值变化问题
-                res.setHeader("Access-Control-Allow-Origin","*");
+                res.setHeader("Access-Control-Allow-Origin", "*");
                 // res.setHeader("Content-Type", "application/json;charset=utf-8");
                 var router = new Router();
                 if (req.method === "GET") {
@@ -62,19 +62,60 @@ http.createServer(function (req, res) {
                 }
                 else if (req.method === "POST") {
                     var arr = [];
-                    req.on("data", (d) => { arr.push(d) });
+                    req.on("data", (d) => { arr.push(d);console.log(d); });
                     req.on("end", () => {
                         let data = Buffer.concat(arr).toString(), ret;
-                        try {
-                            ret = JSON.parse(data);
-                        } catch (err) { }
-                        req.body = ret;
-                        router.param = ret;
+                        //判断请求是否包含文件
+                        //TODO 接收大文件时，一次性存入内存性能太低
+                        if (req.headers['content-type'].indexOf('multipart/form-data') > -1) {
+                            // let contentType = req.headers['content-type'].split(';');
+                            let boundaryArr = req.headers['content-type'].split(';')[1].split('=');
+                            let boundary = '--' + boundaryArr[1];
+                            let formItemArr = data.split(boundary);
+                            let objList = formItemArr.map((item, index, arr) => {
+                                let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(\S+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
+                                // item.replace(/Content-Disposition: (form-data); name="(\s+)"; (filename)="(\s+[.]\s{3-4})"/)
+                                let obj = { name: null, 'Content-Disposition': null, filename: null, 'Content-Type': null, Content: null };
+                                let carr = item.split('\r\n\r\n');
+                                let cdisc = carr[0];
+                                cdisc.replace(reg, function (matchstr, contentDisposition, name, filename, filenameValue, fileType, starIndex, sourceString) {
+                                    obj.name = name;
+                                    obj['Content-Disposition'] = contentDisposition;
+                                    obj[filename] = filenameValue;
+                                    obj['Content-Type'] = fileType;
+                                })
+                                carr.splice(0, 1);
+                                let cvalue = carr.join('');
+                                obj.Content = cvalue.substr(0, cvalue.length - '\r\n'.length);
+                                return obj;
+                            })
+                            console.log(objList);
+                            router.files = [];
+                            objList.map((item, index, arr) => {
+                                if (item.name) {
+                                    if (item.filename) {
+                                        router.files.push(item);
+                                    }
+                                    else {
+                                        router.param[item.name] = item.Content;
+                                    }
+                                }
+                            })
+
+
+                        }
+                        else {
+                            try {
+                                ret = JSON.parse(data);
+                            } catch (err) { }
+                            req.body = ret;
+                            router.param = ret;
+                        }
                         router.resolveUrl(req.url);
                         router.redirectAction(req, res);
                     })
                 }
-                else if(req.method==="OPTIONS"){
+                else if (req.method === "OPTIONS") {
                     res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
                     res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept, origin, content-type");
                     res.setHeader("X-Powered-By", ' 3.2.1');

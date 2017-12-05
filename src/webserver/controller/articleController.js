@@ -1,5 +1,7 @@
 import { default as Bll } from "../../bll/article";
-console.log(Bll);
+import { Stream } from "stream";
+import path from 'path';
+import FileHelper from "../../common/file"
 let controller = {
     bll: new Bll(),
 
@@ -7,21 +9,38 @@ let controller = {
         let param = router.param;
         param.createTime = new Date().toUTCString();
         param.updateTime = new Date().toUTCString();
-        console.log(param);
-        this.bll.saveArticle(
-            (result) => {
+        if (router.files && router.files.length > 0) {
+            let promiseList = router.files.map((item, index, arr) => { 
+                return FileHelper.WriteFile(item).then((url) => {
+                    param[item.name] = url;
+                })
+            });
+            console.log(param);
+            let self = this;
+            Promise.all(promiseList).then(() => {
+                self.bll.saveArticle(
+                    (result) => {
+                        res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+                        res.end(JSON.stringify({ code: 1, data: result }));
+                    },
+                    param
+                );
+            }).catch(err=>{
                 res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
-                res.end(JSON.stringify({ code: 1, data: result }));
-            },
-            // {
-            //     title: "公交卡",
-            //     content: "公交卡好蓝啊",
-            //     author: "rex",
-            //     createTime: new Date().toUTCString(),
-            //     updateTime: new Date().toUTCString()
-            // }
-            param
-        );
+                res.end(JSON.stringify({ code: 1, data: err.stack }));
+            })
+
+        }
+        else {
+            console.log(param);
+            this.bll.saveArticle(
+                (result) => {
+                    res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+                    res.end(JSON.stringify({ code: 1, data: result }));
+                },
+                param
+            );
+        }
     },
     /**
      * 查看文章详情
@@ -44,7 +63,7 @@ let controller = {
         }, param);
 
     },
-    delete(req,res,router){
+    delete(req, res, router) {
         let id = router.param.id;
         this.bll.delArticle((result) => {
             res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });

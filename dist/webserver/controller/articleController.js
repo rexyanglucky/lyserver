@@ -1,5 +1,7 @@
-'use strict';var _article = require('../../bll/article');var _article2 = _interopRequireDefault(_article);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-console.log(_article2.default);
+"use strict";var _article = require("../../bll/article");var _article2 = _interopRequireDefault(_article);
+var _stream = require("stream");
+var _path = require("path");var _path2 = _interopRequireDefault(_path);
+var _file = require("../../common/file");var _file2 = _interopRequireDefault(_file);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 let controller = {
     bll: new _article2.default(),
 
@@ -7,21 +9,38 @@ let controller = {
         let param = router.param;
         param.createTime = new Date().toUTCString();
         param.updateTime = new Date().toUTCString();
-        console.log(param);
-        this.bll.saveArticle(
-        result => {
-            res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
-            res.end(JSON.stringify({ code: 1, data: result }));
-        },
-        // {
-        //     title: "公交卡",
-        //     content: "公交卡好蓝啊",
-        //     author: "rex",
-        //     createTime: new Date().toUTCString(),
-        //     updateTime: new Date().toUTCString()
-        // }
-        param);
+        if (router.files && router.files.length > 0) {
+            let promiseList = router.files.map((item, index, arr) => {
+                return _file2.default.WriteFile(item).then(url => {
+                    param[item.name] = url;
+                });
+            });
+            console.log(param);
+            let self = this;
+            Promise.all(promiseList).then(() => {
+                self.bll.saveArticle(
+                result => {
+                    res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+                    res.end(JSON.stringify({ code: 1, data: result }));
+                },
+                param);
 
+            }).catch(err => {
+                res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+                res.end(JSON.stringify({ code: 1, data: err.stack }));
+            });
+
+        } else
+        {
+            console.log(param);
+            this.bll.saveArticle(
+            result => {
+                res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
+                res.end(JSON.stringify({ code: 1, data: result }));
+            },
+            param);
+
+        }
     },
     /**
         * 查看文章详情
