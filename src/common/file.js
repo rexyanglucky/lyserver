@@ -25,7 +25,7 @@ class FileHelper {
             //     console.log(fileUrl);
             //     resolve(fileUrl);
             // })
-
+// stream.bytesWritten
             let stream = fs.createWriteStream(p);
             stream.write(Content, 'UTF8');
             stream.end();
