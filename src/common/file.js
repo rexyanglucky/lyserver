@@ -26,15 +26,15 @@ class FileHelper {
             //     resolve(fileUrl);
             // })
             // stream.bytesWritten
-            var realContent;
+            // var realContent;
             // if ((typeof Content) === "string") {
             //     realContent = Buffer.from(Content, 'UTF8')
             // }
             // else {
-                realContent = Content;
+                // realContent = Content;
             // }
             let stream = fs.createWriteStream(p);
-            stream.write(realContent,'UTF8');
+            stream.write(Content,'UTF8');
             // stream.write(Con)
             stream.end();
             stream.on("finish", function () {
