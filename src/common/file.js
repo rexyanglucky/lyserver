@@ -4,15 +4,15 @@ import { Buffer } from "buffer";
 
 class FileHelper {
     constructor() {
-       
+
     }
-    static cdn(){return '//192.168.7.171:8001';}
+    static cdn() { return '//192.168.7.171:8001'; }
     /**
      * 保存文件 返回promise
      * @param {content, filename, encode = 'UTF8'} param0 
      */
     static WriteFile({ Content, filename, encode = 'UTF8' }) {
-        let self=this;
+        let self = this;
         return new Promise((resolve, reject) => {
             console.log(__dirname);
             console.log(__filename);
@@ -25,16 +25,24 @@ class FileHelper {
             //     console.log(fileUrl);
             //     resolve(fileUrl);
             // })
-// stream.bytesWritten
+            // stream.bytesWritten
+            var realContent;
+            // if ((typeof Content) === "string") {
+            //     realContent = Buffer.from(Content, 'UTF8')
+            // }
+            // else {
+                realContent = Content;
+            // }
             let stream = fs.createWriteStream(p);
-            stream.write(Content, 'UTF8');
+            stream.write(realContent,'UTF8');
+            // stream.write(Con)
             stream.end();
             stream.on("finish", function () {
                 console.log('write finish');
                 let fileUrl = self.cdn() + '/' + 'uploadFile' + '/' + filename;
                 resolve(fileUrl);
             })
-            stream.on("error", function (err) { console.log(err.stack);reject(err); })
+            stream.on("error", function (err) { console.log(err.stack); reject(err); })
         })
     }
 

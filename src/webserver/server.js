@@ -64,10 +64,11 @@ http.createServer(function (req, res) {
                     var arr = [];
                     req.on("data", (d) => { arr.push(d);console.log(d); });
                     req.on("end", () => {
-                        let data = Buffer.concat(arr).toString(), ret;
+                       
                         //判断请求是否包含文件
                         //TODO 接收大文件时，一次性存入内存性能太低
                         if (req.headers['content-type'].indexOf('multipart/form-data') > -1) {
+                            let data = Buffer.concat(arr).toString(), ret;
                             // let contentType = req.headers['content-type'].split(';');
                             let boundaryArr = req.headers['content-type'].split(';')[1].split('=');
                             let boundary = '--' + boundaryArr[1];
@@ -90,21 +91,22 @@ http.createServer(function (req, res) {
                                 return obj;
                             })
                             console.log(objList);
+                            // router.files = [];
+                            // objList.map((item, index, arr) => {
+                            //     if (item.name) {
+                            //         if (item.filename) {
+                            //             router.files.push(item);
+                            //         }
+                            //         else {
+                            //             router.param[item.name] = item.Content;
+                            //         }
+                            //     }
+                            // })
                             router.files = [];
-                            objList.map((item, index, arr) => {
-                                if (item.name) {
-                                    if (item.filename) {
-                                        router.files.push(item);
-                                    }
-                                    else {
-                                        router.param[item.name] = item.Content;
-                                    }
-                                }
-                            })
-
-
+                            router.files.push({Content:data,filename:'b.txt'});
                         }
                         else {
+                            let data = Buffer.concat(arr).toString(), ret;
                             try {
                                 ret = JSON.parse(data);
                             } catch (err) { }

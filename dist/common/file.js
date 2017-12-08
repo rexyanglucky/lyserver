@@ -25,9 +25,17 @@ class FileHelper {
             //     console.log(fileUrl);
             //     resolve(fileUrl);
             // })
-
+            // stream.bytesWritten
+            var realContent;
+            // if ((typeof Content) === "string") {
+            //     realContent = Buffer.from(Content, 'UTF8')
+            // }
+            // else {
+            realContent = Content;
+            // }
             let stream = _fs2.default.createWriteStream(p);
-            stream.write(Content, 'UTF8');
+            stream.write(realContent, 'UTF8');
+            // stream.write(Con)
             stream.end();
             stream.on("finish", function () {
                 console.log('write finish');
