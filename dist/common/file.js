@@ -34,7 +34,8 @@ class FileHelper {
             // realContent = Content;
             // }
             let stream = _fs2.default.createWriteStream(p);
-            stream.write(Content, 'UTF8');
+            stream.write(Content);
+
             // stream.write(Con)
             stream.end();
             stream.on("finish", function () {

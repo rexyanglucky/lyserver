@@ -62,6 +62,7 @@ http.createServer(function (req, res) {
                 } else
                 if (req.method === "POST") {
                     var arr = [];
+                    // req.setEncoding('utf8');
                     req.on("data", d => {arr.push(d);console.log(d);});
                     req.on("end", () => {
 
@@ -104,8 +105,6 @@ http.createServer(function (req, res) {
                                     }
                                 }
                             });
-                            // router.files = [];
-                            // router.files.push({Content:data,filename:'b.txt'});
                         } else
                         {
                             let data = Buffer.concat(arr).toString(),ret;
