@@ -14,7 +14,6 @@ class ArticleBll {
     saveArticle(callback, ...data) {
         this.dbHelper.InsertDB({
             collectionName: "article", data: data, callback: (result) => {
-                console.log(result.insertedIds);
                 callback(result.insertedIds);
             }
         });
@@ -26,7 +25,6 @@ class ArticleBll {
     getArticle(callback, ...id) {
         this.dbHelper.QueryDB({
             collectionName: "article", query: { _id: ObjectId(id[0]) }, callback: (result) => {
-                console.log(result);
                 callback(result);
             }
         });
@@ -58,16 +56,17 @@ class ArticleBll {
 
         this.dbHelper.QueryDB({
             collectionName: "article", query: {}, callback: (result) => {
-                console.log(result);
                 callback(result);
             }
         });
     }
 
-    delArticle(callback,...id){
-        this.dbHelper.DeleteDB({collectionName:"article",query:{_id:ObjectId(id[0])},callback:(result)=>{
-            callback(result);
-        }})
+    delArticle(callback, ...id) {
+        this.dbHelper.DeleteDB({
+            collectionName: "article", query: { _id: ObjectId(id[0]) }, callback: (result) => {
+                callback(result);
+            }
+        })
     }
 }
 export default ArticleBll;
