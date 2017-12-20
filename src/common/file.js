@@ -14,15 +14,11 @@ class FileHelper {
     static WriteFile({ Content, filename, encode = 'UTF8' }) {
         let self = this;
         return new Promise((resolve, reject) => {
-            console.log(__dirname);
-            console.log(__filename);
             let p = path.resolve(__dirname, '../webserver/uploadFile', filename);
-            // console.log(p);
             // let buff=Buffer.from(Content,'utf8');
             // fs.writeFile(p,buff, (err) => {
             //     if(err){reject(err);return;}
             //     let fileUrl = self.cdn() + '/' + 'uploadFile' + '/' + filename;
-            //     console.log(fileUrl);
             //     resolve(fileUrl);
             // })
             // stream.bytesWritten

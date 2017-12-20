@@ -31,7 +31,6 @@ class MongodbHelper {
                             console.log("Error:" + err);
                         }
                         else {
-                            console.log(result);
                         }
                         if (cb) {
                             cb(result);
