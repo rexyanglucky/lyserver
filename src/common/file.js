@@ -6,7 +6,7 @@ class FileHelper {
     constructor() {
 
     }
-    static cdn() { return '//192.168.7.171:8001'; }
+    // static cdn() { return '//192.168.7.171:8001'; }
     /**
      * 保存文件 返回promise
      * @param {content, filename, encode = 'UTF8'} param0 
@@ -40,7 +40,7 @@ class FileHelper {
             stream.end();
             stream.on("finish", function () {
                 console.log('write finish');
-                let fileUrl = self.cdn() + '/' + 'uploadFile' + '/' + filename;
+                let fileUrl = 'uploadFile' + '/' + filename;
                 resolve(fileUrl);
             })
             stream.on("error", function (err) { console.log(err.stack); reject(err); })
