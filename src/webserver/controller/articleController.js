@@ -15,7 +15,6 @@ let controller = {
                     param[item.name] = url;
                 })
             });
-            console.log(param);
             let self = this;
             Promise.all(promiseList).then(() => {
                 self.bll.saveArticle(

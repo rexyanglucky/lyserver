@@ -151,7 +151,7 @@ function setHtml(path, req, res) {
             res.end("加载文件失败");
         }
         else {
-            var t = path.substring(path.lastIndexOf(".") + 1);
+            var t = path.substring(path.lastIndexOf(".") + 1).toLowerCase();
             if (MIME.hasOwnProperty(t)) {
                 res.writeHead(200, { 'Content-Type': MIME[t] });
                 res.end(data.toString());

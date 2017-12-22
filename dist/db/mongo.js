@@ -31,7 +31,6 @@ const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp'; /*
                             console.log("Error:" + err);
                         } else
                         {
-                            console.log(result);
                         }
                         if (cb) {
                             cb(result);
