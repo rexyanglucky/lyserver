@@ -94,7 +94,7 @@ FileForm.GetFromList = function (data, req) {
                     data.copy(realDataByte, 0, findIndex + NEWLINE_BYTE.length, findIndex + NEWLINE_BYTE.length+realDataByte.length);
                     findIndex = realDataEnd;
                     obj.Content = realDataByte;
-                    if (obj.filename) {
+                    if (obj['Content-Type']) {
                         obj.Content = realDataByte;
                     }
                     else {

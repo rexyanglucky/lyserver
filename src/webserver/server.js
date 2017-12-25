@@ -172,7 +172,7 @@ function setHtml(path, req, res) {
  */
 function setFile(path, req, res) {
     var data = fs.readFileSync(path, "binary");
-    var t = path.substring(path.lastIndexOf(".") + 1);
+    var t = path.substring(path.lastIndexOf(".") + 1).toLowerCase();
     if (MIME.hasOwnProperty(t)) {
         res.writeHead(200, { 'Content-Type': MIME[t] });
         res.end(data, "binary");
