@@ -16,7 +16,7 @@ let controller = {
             res.end(JSON.stringify({ code: 2, data: '参数错误' }));
             return false;
         }
-        let timeStamp = new Date().getTime();
+        let timeStamp =parseInt(new Date().getTime()/1000);
         let noncestr = "xiaoliangyu";
         let appid = 'wx932146c9470bf79c';
         let appSecret = 'a60a48b54ad07a20e8d67fa070e8632e';
@@ -101,7 +101,7 @@ let controller = {
     getSignature(appid, appSecret, nonceStr, timeStamp, url) {
         return new Promise((resolve, reject) => {
             this.getJsapiTicket(appid, appSecret).then((jsapi_ticket) => {
-                let signValue = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "×tamp=" + timeStamp + "&url=" + url;
+                let signValue = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timeStamp + "&url=" + url;
                 let sha1 = crypto.createHash('sha1');
                 sha1.update(signValue);
                 let signature = sha1.digest('hex');
