@@ -18,8 +18,11 @@ let controller = {
         }
         let timeStamp =parseInt(new Date().getTime()/1000);
         let noncestr = "xiaoliangyu";
-        let appid = 'wx932146c9470bf79c';
-        let appSecret = 'a60a48b54ad07a20e8d67fa070e8632e';
+        // let appid = 'wx932146c9470bf79c';
+        // let appSecret = 'a60a48b54ad07a20e8d67fa070e8632e';
+        let appid = 'wx5be5cfaafdd810b4';
+        let appSecret = 'd4624c36b6795d1d99dcf0547af5443d';
+        
         this.getSignature(appid, appSecret, noncestr, timeStamp, url).then((data) => {
             let result = { timestamp: timeStamp, nonceStr: noncestr, signature: data, appId: appid };
             res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
