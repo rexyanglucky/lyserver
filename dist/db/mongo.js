@@ -3,10 +3,11 @@
 
 var _mongodb = require('mongodb');
 // const DB_CONN_STR = 'mongodb://localhost:27017/lyapp';
-const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp'; /*
-                                                                     author:mongo helper
-                                                                    */class MongodbHelper {
-    constructor() {
+const DB_CONN_STR = 'mongodb://rex:rex123@127.0.0.1:27017/lyapp';
+// const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp';
+/*
+ author:mongo helper
+*/class MongodbHelper {constructor() {
 
     } // console.log(MongoClient);
     /**
@@ -125,11 +126,11 @@ const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp'; /*
        * 查询数据
        * @param {*} param0 
        */
-    QueryDB({ collectionName, query, callback }) {
+    QueryDB({ collectionName, query, projection, callback }) {
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query).sort({ updateTime: 1 }).toArray((err, result) => {
+                collection.find(query, projection).sort({ updateTime: -1 }).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);

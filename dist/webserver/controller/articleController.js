@@ -2,9 +2,23 @@
 var _stream = require("stream");
 var _path = require("path");var _path2 = _interopRequireDefault(_path);
 var _file = require("../../common/file");var _file2 = _interopRequireDefault(_file);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-let controller = {
+/** @namespace  */
+let articleController = {
     bll: new _article2.default(),
 
+
+    /**
+                                   * 添加文章
+                                   * @param {*} req 
+                                   * @param {*} res 
+                                   * @param {*} router 
+                                   * @param {Object} param 
+                                   * {content:{type:string,desc:'内容'},
+                                   * title:{type:string,desc:'标题'},
+                                   * headImg:{type:[blob],desc:'图片'},
+                                   * isMD:{type:boolean,desc:'是否是markdown'}}
+                                   * @returns {object} {code:1,data:result}
+                                   */
     add(req, res, router) {
         let param = router.param;
         param.createTime = new Date().toUTCString();
@@ -28,7 +42,6 @@ let controller = {
                 res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
                 res.end(JSON.stringify({ code: 1, data: err.stack }));
             });
-
         } else
         {
             console.log(param);
@@ -42,11 +55,17 @@ let controller = {
         }
     },
     /**
-        * 查看文章详情
-        * @param {*} req 
-        * @param {*} res 
-        * @param {*} router 
-        */
+       * 获取文章详情
+       * @param {*} req 
+       * @param {*} res 
+       * @param {*} router 
+       * @param {string} id 文章ID
+       * @returns {object} 
+       * {content:{type:string,desc:'内容'},
+       * title:{type:string,desc:'标题'},
+       * headImg:{type:[blob],desc:'图片'},
+       * isMD:{type:boolean,desc:'是否是markdown'}}
+       */
     detial(req, res, router) {
         let id = router.param.id;
         this.bll.getArticle(result => {
@@ -54,14 +73,31 @@ let controller = {
             res.end(JSON.stringify({ code: 1, data: result }));
         }, id);
     },
+    /**
+       * 获取文章列表
+       * @param {*} req 
+       * @param {*} res 
+       * @param {*} router 
+       * @returns {object} {code:1,data:result}
+       */
     list(req, res, router) {
         let param = router.param;
         this.bll.getArticleList(result => {
+            let content = result.content ? result.content.replace(/<\/?.+?>/g, "") : "";
+            content = content.length > 100 ? content.substr(0, 100) + '...' : content;
+
             res.writeHead(200, { 'Content-Type': 'text/plain;charset:utf-8' });
             res.end(JSON.stringify({ code: 1, data: result }));
         }, param);
 
     },
+    /**
+       * 删除文章
+       * @param {*} req 
+       * @param {*} res 
+       * @param {*} router 
+       * @param {string} id 文章ID
+       */
     delete(req, res, router) {
         let id = router.param.id;
         this.bll.delArticle(result => {
@@ -70,7 +106,5 @@ let controller = {
         }, id);
     } };
 
-
-
-module.exports = controller;
+module.exports = articleController;
 //# sourceMappingURL=articleController.js.map

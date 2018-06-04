@@ -29,7 +29,7 @@ var MIME = {
 
 http.createServer(function (req, res) {
     if (req.url != "/favicon.ico") {
-        var path = url.parse(req.url).path;
+        var path = url.parse(req.url).pathname;
         if (path == "/") {
             path = "/index.html";
         }
@@ -49,7 +49,7 @@ http.createServer(function (req, res) {
 
             } else
             {
-                //todo 可为每个请求创建单独的上下文存储路由相关信息，目前暂且使用全局router
+                //todo 可为每个请求创建单独的上下文存储路由相关信息
                 //可测试多个请求下router值变化问题
                 res.setHeader("Access-Control-Allow-Origin", "*");
                 // res.setHeader("Content-Type", "application/json;charset=utf-8");
