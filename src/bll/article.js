@@ -55,7 +55,7 @@ class ArticleBll {
         // }
 
         this.dbHelper.QueryDB({
-            collectionName: "article", query: {}, callback: (result) => {
+            collectionName: "article", query: {},projection:{isMD:0,createTime:0}, callback: (result) => {
                 callback(result);
             }
         });
@@ -67,6 +67,17 @@ class ArticleBll {
                 callback(result);
             }
         })
+    }
+    /**
+     * 保存文章历史记录
+     * 
+     */
+    saveArticleHistory(){
+        this.dbHelper.InsertDB({
+            collectionName: "articleHistory", data: data, callback: (result) => {
+                callback(result.insertedIds);
+            }
+        });
     }
 }
 export default ArticleBll;

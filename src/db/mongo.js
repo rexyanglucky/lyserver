@@ -10,17 +10,18 @@ class MongodbHelper {
     constructor() {
         // console.log(MongoClient);
     }
+
     /**
      * 连接数据库
      * @param {successCallBack} successCallBack 连接成功回调
      * @param {errCallBack} errCallBack         连接失败回调
      */
-    Connect(successCallBack,errCallBack) {
+    Connect(successCallBack, errCallBack) {
         console.log("start connect");
         MongoClient.connect(DB_CONN_STR, (err, db) => {
             if (err) {
                 console.log("connect failed");
-                errCallBack&&errCallBack(err);
+                errCallBack && errCallBack(err);
             }
             else {
                 console.log("connected");
@@ -30,11 +31,10 @@ class MongodbHelper {
                         db.close();
                         if (err) {
                             console.log("Error:" + err);
+                            cb && cb(err)
                         }
                         else {
-                        }
-                        if (cb) {
-                            cb(result);
+                            cb && cb(result);
                         }
                     });
                 }
@@ -69,7 +69,7 @@ class MongodbHelper {
             }
         }
         //前台传递过来的回调函数，用于将连接异常返回给前台
-        this.Connect(c,callback);
+        this.Connect(c, callback);
     }
     /**
      * 删除数据
@@ -94,7 +94,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c,callback);
+        this.Connect(c, callback);
 
     }
     /**
@@ -120,17 +120,17 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c,callback);
+        this.Connect(c, callback);
     }
     /**
      * 查询数据
      * @param {*} param0 
      */
-    QueryDB({ collectionName, query,projection, callback }) {
+    QueryDB({ collectionName, query, projection, callback, limit = 1000, skip = 0 }) {
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query,projection).sort({ updateTime: -1 }).toArray((err, result) => {
+                collection.find(query, projection).sort({ updateTime: -1 }).limit(limit).skip(skip).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);
@@ -145,7 +145,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c,callback);
+        this.Connect(c, callback);
 
     }
     /**
@@ -171,7 +171,7 @@ class MongodbHelper {
                 console.error("collectionName is unvlidate");
             }
         }
-        this.Connect(c,callback);
+        this.Connect(c, callback);
 
     }
 }

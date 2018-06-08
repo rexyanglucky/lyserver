@@ -10,6 +10,7 @@ const DB_CONN_STR = 'mongodb://rex:rex123@127.0.0.1:27017/lyapp';
 */class MongodbHelper {constructor() {
 
     } // console.log(MongoClient);
+
     /**
      * 连接数据库
      * @param {successCallBack} successCallBack 连接成功回调
@@ -30,11 +31,10 @@ const DB_CONN_STR = 'mongodb://rex:rex123@127.0.0.1:27017/lyapp';
                         db.close();
                         if (err) {
                             console.log("Error:" + err);
+                            cb && cb(err);
                         } else
                         {
-                        }
-                        if (cb) {
-                            cb(result);
+                            cb && cb(result);
                         }
                     });
                 }
@@ -126,11 +126,11 @@ const DB_CONN_STR = 'mongodb://rex:rex123@127.0.0.1:27017/lyapp';
        * 查询数据
        * @param {*} param0 
        */
-    QueryDB({ collectionName, query, projection, callback }) {
+    QueryDB({ collectionName, query, projection, callback, limit = 1000, skip = 0 }) {
         function c(db, completeCallback) {
             if (collectionName && query) {
                 let collection = db.collection(collectionName);
-                collection.find(query, projection).sort({ updateTime: -1 }).toArray((err, result) => {
+                collection.find(query, projection).sort({ updateTime: -1 }).limit(limit).skip(skip).toArray((err, result) => {
                     ////查询成功回调
                     if (err) {
                         completeCallback(err, result, callback);

@@ -14,32 +14,39 @@ class FileHelper {
     static WriteFile({ Content, filename, encode = 'UTF8' }) {
         let self = this;
         return new Promise((resolve, reject) => {
-            let p = _path2.default.resolve(__dirname, '../webserver/uploadFile', filename);
-            // let buff=Buffer.from(Content,'utf8');
-            // fs.writeFile(p,buff, (err) => {
-            //     if(err){reject(err);return;}
-            //     let fileUrl = self.cdn() + '/' + 'uploadFile' + '/' + filename;
-            //     resolve(fileUrl);
-            // })
-            // stream.bytesWritten
-            // var realContent;
-            // if ((typeof Content) === "string") {
-            //     realContent = Buffer.from(Content, 'UTF8')
-            // }
-            // else {
-            // realContent = Content;
-            // }
-            let stream = _fs2.default.createWriteStream(p);
-            stream.write(Content);
+            try {
+                if (!_fs2.default.existsSync(_path2.default.resolve(__dirname, '../webserver/uploadFile'))) {
+                    _fs2.default.mkdirSync(_path2.default.resolve(__dirname, '../webserver/uploadFile'));
+                }
+                let p = _path2.default.resolve(__dirname, '../webserver/uploadFile', filename);
+                // let buff=Buffer.from(Content,'utf8');
+                // fs.writeFile(p,buff, (err) => {
+                //     if(err){reject(err);return;}
+                //     let fileUrl = self.cdn() + '/' + 'uploadFile' + '/' + filename;
+                //     resolve(fileUrl);
+                // })
+                // stream.bytesWritten
+                // var realContent;
+                // if ((typeof Content) === "string") {
+                //     realContent = Buffer.from(Content, 'UTF8')
+                // }
+                // else {
+                // realContent = Content;
+                // }
+                let stream = _fs2.default.createWriteStream(p);
+                stream.write(Content);
 
-            // stream.write(Con)
-            stream.end();
-            stream.on("finish", function () {
-                console.log('write finish');
-                let fileUrl = 'uploadFile' + '/' + filename;
-                resolve(fileUrl);
-            });
-            stream.on("error", function (err) {console.log(err.stack);reject(err);});
+                // stream.write(Con)
+                stream.end();
+                stream.on("finish", function () {
+                    console.log('write finish');
+                    let fileUrl = 'uploadFile' + '/' + filename;
+                    resolve(fileUrl);
+                });
+                stream.on("error", function (err) {reject(err);});
+            } catch (err) {
+                reject(err);
+            }
         });
     }}exports.default =
 
