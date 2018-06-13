@@ -58,3 +58,6 @@ typings/
 .env
 # Output of 'jsdoc'
 out/
+
+#dist
+dist/
