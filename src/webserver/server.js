@@ -68,7 +68,7 @@ http.createServer(function (req, res) {
 
                         //判断请求是否包含文件
                         //TODO 接收大文件时，一次性存入内存性能太低
-                        if (req.headers['content-type'].indexOf('multipart/form-data') > -1) {
+                        if (req.headers['content-type']&&req.headers['content-type'].indexOf('multipart/form-data') > -1) {
                             let bufferData = Buffer.concat(arr);
                             let objList = FileFrom.GetFromList(bufferData, req);
                             // let data = bufferData.toString(), ret;
