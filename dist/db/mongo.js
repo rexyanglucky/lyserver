@@ -3,11 +3,11 @@
 
 var _mongodb = require('mongodb');
 // const DB_CONN_STR = 'mongodb://localhost:27017/lyapp';
-const DB_CONN_STR = 'mongodb://rex:rex123@127.0.0.1:27017/lyapp';
-// const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp';
-/*
- author:mongo helper
-*/class MongodbHelper {constructor() {
+// const DB_CONN_STR = 'mongodb://rex:rex123@127.0.0.1:27017/lyapp';
+const DB_CONN_STR = 'mongodb://rex:rex123@47.96.6.140:27017/lyapp'; /*
+                                                                     author:mongo helper
+                                                                    */class MongodbHelper {
+    constructor() {
 
     } // console.log(MongoClient);
 

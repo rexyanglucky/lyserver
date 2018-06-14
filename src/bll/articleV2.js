@@ -71,6 +71,7 @@ class ArticleBll {
      * @param {Array} id 
      */
     getArticle(...id) {
+        this.addVisitCount(id[0]);
         return new Promise((resolve, reject) => {
             this.dbHelper.QueryDB({
                 collectionName: "article", query: { _id: ObjectId(id[0]) }, callback: (result) => {
@@ -79,6 +80,23 @@ class ArticleBll {
                 }
             });
         })
+    }
+    /**
+     * 添加文章访问量 异步
+     * @param {string} id 文章ID
+     */
+    addVisitCount(id) {
+        try {
+            this.dbHelper.UpdateDB({
+                collectionName: 'article',
+                data: { $inc : {'vcount' : 1} },
+                query: { _id: ObjectId(id) },
+                callback: result => { console.log('visit count') }
+            })
+        }
+        catch (err) {
+            console.log('add visit' + err.stack);
+        }
     }
 
     /**
