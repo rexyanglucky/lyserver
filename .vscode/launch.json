@@ -14,9 +14,9 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/src\\webserver\\server.js",
+            "program": "${workspaceFolder}/src/webserver/server.js",
             "outFiles": [
-                "${workspaceFolder}/dist\\webserver\\server.js"
+                "${workspaceFolder}/dist/webserver/server.js"
             ],
             "sourceMaps": true
             // "preLaunchTask": "npm run build"

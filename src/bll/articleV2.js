@@ -13,12 +13,17 @@ class ArticleBll {
      */
     saveArticleDraft(...data) {
         return new Promise((resolve, reject) => {
-            if(data._id){data._id = ObjectId(data._id);}
+            data.forEach(item => {
+                if(item._id){
+                    item._id = ObjectId(item._id);
+                }
+            });
             this.dbHelper.InsertDB({
                 collectionName: "articleDraft", data: data, callback: (result) => {
                     resolve(result.insertedIds);
                 }
             });
+            
         })
         // this.dbHelper.InsertDB({
         //     collectionName: "articleDraft", data: data, callback: (result) => {
