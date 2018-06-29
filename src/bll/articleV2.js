@@ -13,6 +13,7 @@ class ArticleBll {
      */
     saveArticleDraft(...data) {
         return new Promise((resolve, reject) => {
+            if(data._id){data._id = ObjectId(data._id);}
             this.dbHelper.InsertDB({
                 collectionName: "articleDraft", data: data, callback: (result) => {
                     resolve(result.insertedIds);
