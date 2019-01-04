@@ -1,3 +1,6 @@
+import fs from "fs";
+import path, { resolve } from 'path';
+
 const CONTENT_DISPOSITION = "Content-Disposition";
 const ENTER_STR = "Content-Disposition";
 const FILENAME = "filename";
@@ -7,8 +10,10 @@ const NEWLINEONE = "\r\n";
 let Content_Disposition_Byte = Buffer.from(CONTENT_DISPOSITION, 'utf8');
 let NEWLINE_BYTE = Buffer.from(NEWLINE, 'utf8');
 let NEWLINEONE_BYTE = Buffer.from(NEWLINEONE, 'utf8');
-function FileForm() {
 
+function FileForm() {
+    this.FormList = [];
+    this.CurForm = {}
 }
 /*
 Horspool 算法实现的快速子串匹配，这里用于在大Buffer中查找小Buffer
@@ -118,4 +123,92 @@ FileForm.GetFromList = function (data, req) {
     return objList;
 
 }
+/**
+ * 
+ */
+FileForm.prototype.HandleChunkFrom = function(data, header) {
+    let boundaryArr = header.split(';')[1].split('=');
+    let boundary = '--' + boundaryArr[1];
+    let boundaryByte = Buffer.from(boundary, 'utf8');
+    let scanIndex = 0;
+    while (scanIndex < data.length) {
+        let findIndex = data.IndexOfExt(boundaryByte, scanIndex);
+        if (findIndex > -1) {
+            //boundary 前已无内容要处理
+            if (findIndex - scanIndex === 0){
+                //查找当前 Content-Disposition
+                findIndex = data.IndexOfExt(Content_Disposition_Byte, scanIndex);
+                if (findIndex > -1) {
+                    let descEnd = data.IndexOfExt(NEWLINE_BYTE, findIndex);
+                    let desc = data.toString('utf8', findIndex, descEnd);
+                    findIndex = descEnd;
+                    let obj = { name: null, 'Content-Disposition': null, filename: null, 'Content-Type': null, Content: null };
+                    let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(\S+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
+                    desc.replace(reg, function (matchstr, contentDisposition, name, filename, filenameValue, fileType, starIndex, sourceString) {
+                        obj.name = name;
+                        obj['Content-Disposition'] = contentDisposition;
+                        obj[filename] = filenameValue;
+                        obj['Content-Type'] = fileType;
+                    })
+                    this.CurForm = obj;
+                    if (obj['Content-Type']) {
+                        this.CurForm.temp  = path.resolve(__dirname, '../webserver/temp', new Date().getTime().toString() + '_temp' + this.CurForm.filename);
+                    }
+                    else {
+                        obj.Content = Buffer.alloc(0);
+                    }
+                    this.FormList.push(obj);
+                    findIndex = findIndex + NEWLINE_BYTE.length;
+                    
+                    // continue;
+                    // // findIndex = data.IndexOfExt(NEWLINE_BYTE, findIndex);
+                    // let realDataEnd = data.IndexOfExt(boundaryByte, findIndex);
+                    
+                    // let realDataLength = realDataEnd - findIndex - NEWLINE_BYTE.length - NEWLINEONE_BYTE.length;
+                    // let realDataByte = Buffer.alloc(realDataLength);
+
+                    // data.copy(realDataByte, 0, findIndex + NEWLINE_BYTE.length, findIndex + NEWLINE_BYTE.length+realDataByte.length);
+                    // findIndex = realDataEnd;
+                    // if (obj['Content-Type']) {
+                    //     this.CurForm.temp  = path.resolve(__dirname, '../webserver/temp', new Date().getTime().toString() + '_temp' + this.CurForm.filename);
+                    //     fs.appendFileSync(this.CurForm.temp, realDataByte);
+                    // }
+                    // else {
+                    //     obj.Content = realDataByte;
+                    // }
+                    // this.FormList.push(obj);
+                } else {
+                    break;
+                }
+            } else {
+                // 上一节点的数据内容
+                let lastDataByte = Buffer.alloc(findIndex - scanIndex);
+                data.copy(lastDataByte, 0, scanIndex, findIndex);
+                let obj = this.CurForm;
+                if (obj['Content-Type']) {
+                    fs.appendFileSync(this.CurForm.temp, lastDataByte);
+                }
+                else {
+                    obj.Content = Buffer.concat([obj.Content,lastDataByte]);
+                }
+            }
+            scanIndex = findIndex;
+         
+        } else {
+            //如果没有boundary 追加到上一节点
+            let lastDataByte = Buffer.alloc(data.length - scanIndex);
+            data.copy(lastDataByte, 0, scanIndex, data.length);
+            let obj = this.CurForm;
+            if (obj['Content-Type']) {
+                fs.appendFileSync(this.CurForm.temp, lastDataByte);
+            }
+            else {
+                obj.Content.concat([lastDataByte]);
+            }
+            break;
+        }
+    }
+    console.log('chunk handle complete');
+}
+
 module.exports = FileForm;

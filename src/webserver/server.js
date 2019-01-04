@@ -63,14 +63,23 @@ http.createServer(function (req, res) {
                 else if (req.method === "POST") {
                     var arr = [];
                     // req.setEncoding('utf8');
-                    req.on("data", (d) => { arr.push(d); console.log(d); });
+                    const fileForm = new FileFrom();
+                    req.on("data", (d) => {
+                        console.log(req.headers['content-type']);
+                        // arr.push(d);
+                        // console.log(d);
+                        if(req.headers['content-type'] && req.headers['content-type'].indexOf('multipart/form-data') > -1){
+                            fileForm.HandleChunkFrom(d, req.headers['content-type']);
+                        }
+                     });
                     req.on("end", () => {
-
+                        
                         //判断请求是否包含文件
                         //TODO 接收大文件时，一次性存入内存性能太低
-                        if (req.headers['content-type']&&req.headers['content-type'].indexOf('multipart/form-data') > -1) {
-                            let bufferData = Buffer.concat(arr);
-                            let objList = FileFrom.GetFromList(bufferData, req);
+                        if (req.headers['content-type'] && req.headers['content-type'].indexOf('multipart/form-data') > -1) {
+                            console.log(fileForm.FormList);
+                            // let bufferData = Buffer.concat(arr);
+                            // let objList = FileFrom.GetFromList(bufferData, req);
                             // let data = bufferData.toString(), ret;
                             // // let contentType = req.headers['content-type'].split(';');
                             // let boundaryArr = req.headers['content-type'].split(';')[1].split('=');
@@ -94,23 +103,23 @@ http.createServer(function (req, res) {
                             //     return obj;
                             // })
                             // console.log(objList);
-                            router.files = [];
-                            objList.map((item, index, arr) => {
-                                if (item.name) {
-                                    if (item.filename) {
-                                        router.files.push(item);
-                                    }
-                                    else {
-                                        router.param[item.name] = item.Content;
-                                    }
-                                }
-                            })
+                            // router.files = [];
+                            // objList.map((item, index, arr) => {
+                            //     if (item.name) {
+                            //         if (item.filename) {
+                            //             router.files.push(item);
+                            //         }
+                            //         else {
+                            //             router.param[item.name] = item.Content;
+                            //         }
+                            //     }
+                            // })
                         }
                         else {
                             let data = Buffer.concat(arr).toString(), ret;
                             try {
-                                ret = JSON.parse(data);
-                            } catch (err) { }
+                                router.ret = querystring.parse(data);
+                            } catch (err) {res.end("参数错误" + data); return;}
                             req.body = ret;
                             router.param = ret;
                         }
