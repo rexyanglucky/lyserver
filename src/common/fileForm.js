@@ -82,7 +82,7 @@ FileForm.GetFromList = function (data, req) {
                     let desc = data.toString('utf8', findIndex, descEnd);
                     findIndex = descEnd;
                     let obj = { name: null, 'Content-Disposition': null, filename: null, 'Content-Type': null, Content: null };
-                    let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(\S+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
+                    let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(.+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
                     desc.replace(reg, function (matchstr, contentDisposition, name, filename, filenameValue, fileType, starIndex, sourceString) {
                         obj.name = name;
                         obj['Content-Disposition'] = contentDisposition;
@@ -143,7 +143,8 @@ FileForm.prototype.HandleChunkFrom = function(data, header) {
                     let desc = data.toString('utf8', findIndex, descEnd);
                     findIndex = descEnd;
                     let obj = { name: null, 'Content-Disposition': null, filename: null, 'Content-Type': null, Content: null };
-                    let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(\S+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
+                    // let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(\S+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
+                    let reg = /Content-Disposition: (form-data); name="(\S+)"(?:; (filename)="(.+[.]\S{3,4})"\s+Content-Type: (\S+))?/gi
                     desc.replace(reg, function (matchstr, contentDisposition, name, filename, filenameValue, fileType, starIndex, sourceString) {
                         obj.name = name;
                         obj['Content-Disposition'] = contentDisposition;
